@@ -49,6 +49,45 @@ public class TADSA {
         }
     }
 
+    private static void mergeSort(ArrayList<TADSA> list, int left, int right) {
+        if (left < right) {
+            int middle = (left + right) / 2;
+            mergeSort(list, left, middle);
+            mergeSort(list, middle + 1, right);
+            merge(list, left, middle, right);
+        }
+    }
+
+    private static void merge(ArrayList<TADSA> list, int left, int middle, int right) {
+        ArrayList<TADSA> leftList = new ArrayList<>(list.subList(left, middle + 1));
+        ArrayList<TADSA> rightList = new ArrayList<>(list.subList(middle + 1, right + 1));
+        
+        int i = 0, j = 0, k = left;
+        while (i < leftList.size() && j < rightList.size()) {
+            if (leftList.get(i).brands.compareToIgnoreCase(rightList.get(j).brands) <= 0) {
+                list.set(k++, leftList.get(i++));
+            } else {
+                list.set(k++, rightList.get(j++));
+            }
+        }
+        
+        while (i < leftList.size()) {
+            list.set(k++, leftList.get(i++));
+        }
+        
+        while (j < rightList.size()) {
+            list.set(k++, rightList.get(j++));
+        }
+    }
+
+    public static void main(String[] args) {
+        ArrayList<TADSA> al = new ArrayList<TADSA>();
+        loadFromCSV(al); 
+        int choices = -1;
+        Scanner jay = new Scanner(System.in);
+        Scanner jays = new Scanner(System.in);
+
+
     public static void main(String[] args) {
         ArrayList<TADSA> al = new ArrayList<TADSA>();
         loadFromCSV(al); 
@@ -108,14 +147,9 @@ public class TADSA {
 
                 case 3:
                  
-                    int w = al.size();
-                    for (int i = 0; i < w - 1; i++) {
-                        for (int j = 0; j < w - i - 1; j++) {
-                            if (al.get(j).brands.compareToIgnoreCase(al.get(j + 1).brands) > 0) {
-                              
-                                TADSA temp = al.get(j);
-                                al.set(j, al.get(j + 1));
-                                al.set(j + 1, temp);
+                  mergeSort(al, 0, al.size() - 1);
+                    System.out.println(al);
+                    break;
                             }
                         }
                     }
